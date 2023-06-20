@@ -1,0 +1,26 @@
+{
+    "name": "user-service",
+    "config": {
+        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "database.hostname": "postgres-db",
+        "database.port": "5432",
+        "database.user": "postgres",
+        "database.password": "postgres",
+        "database.dbname": "user_service",
+        "topic.prefix": "debezium",
+        "table.include.list": "public.users",
+        "column.include.list": "public.users.id,public.users.username,public.users.email,public.users.name",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
+        "transforms":"unwrap,createKey,extractString",
+        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+        "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.delete.handling.mode": "rewrite",
+        "transforms.unwrap.add.fields": "op",
+        "transforms.unwrap.add.headers": "db",
+        "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+        "transforms.createKey.fields": "id",
+        "transforms.extractString.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+        "transforms.extractString.field": "id"
+    }
+}
